@@ -4,6 +4,9 @@
 .pub/
 build/
 
+/bin
+/text
+
 # If you're using Flutter for Dart console testing
 .flutter-plugins
 .flutter-plugins-dependencies
@@ -14,6 +17,7 @@ build/
 *.iml
 *.ipr
 *.iws
+*.yaml
 
 # VS Code specific (if you sometimes use VS Code too)
 .vscode/
@@ -32,3 +36,11 @@ coverage/
 # Other temporary files
 *.tmp
 *.lock
+
+.gitignore
+
+CHANGELOG.md
+
+
+
+
