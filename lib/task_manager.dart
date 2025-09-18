@@ -4,7 +4,21 @@
 
 import 'dart:io';
 
-List<String> tasks = [];
+class Task{
+  String title;
+  String category;
+  bool isDone;
+
+  Task(this.title, {this.category = "General", this.isDone = false});
+
+  @override
+  String toString(){
+    return "$title [Category: $category] ${isDone ? '(Done)' : ''}";
+  }
+
+}
+
+List<Task> tasks = [];
 
 void main(){
   String appName = "Task Master";
@@ -28,6 +42,8 @@ void main(){
         deleteTask();
         break;
       case 4:
+        markTaskDone();
+      case 5:
         print("Exiting the program...");
         isRunning = false;
         break;
@@ -43,7 +59,8 @@ int menu(){
   print("1. Add Task.");
   print("2. View Tasks.");
   print("3. Delete Tasks.");
-  print("4. Exit.");
+  print("4. Mark Task as Done");
+  print("5. Exit.");
   stdout.write("Enter your choice: ");
 
   String? input = stdin.readLineSync();
@@ -53,9 +70,14 @@ int menu(){
 void addTask(){
   stdout.write("Enter task name: ");
   String? name = stdin.readLineSync();
+
+  stdout.write("Enter task category: ");
+  String? category = stdin.readLineSync();
+
   if (name!= null && name.isNotEmpty){
-    tasks.add(name);
-    print("Task Added Successfully.");
+    String finalCategory = (category == null || category.isEmpty)? "General" : category;
+    tasks.add(Task(name, category: finalCategory));
+    print("Task '$name' added successfully under category '$finalCategory'.");
   } else {
     print("Invalid task name.");
   }
@@ -63,29 +85,46 @@ void addTask(){
 
 void viewTask(){
   if(tasks.isEmpty){
-    print("No Tasks to display.");
+    print("Task List Is Empty.");
     return;
   }
-  for(int i=0; i<tasks.length; i++){
-    print("Task ${i+1} : ${tasks[i]}");
+
+  for(int i = 0; i<tasks.length; i++){
+    print("${i+1}. ${tasks[i]}");
   }
 }
 
-void deleteTask(){
+void deleteTask() {
   viewTask();
 
-  if(tasks.isEmpty){
-    return;
-  }
+  if (tasks.isEmpty) return;
 
   stdout.write("Enter task number to delete: ");
-  String? input = stdin.readLineSync();
-  int index = int.tryParse(input ?? '') ?? 0;
+  String? input  = stdin.readLineSync();
+  int? index = int.tryParse(input ?? '');
 
-  if(index > 0 && index <= tasks.length){
-    String removed = tasks.removeAt(index-1);
-    print("Task '$removed' deleted successfully.");
+  if (index != null && index>0 && index <= tasks.length) {
+    Task removed = tasks.removeAt(index-1);
+    print("Task '${removed.title}' deleted.");
   } else {
-    print("Invalid Task number");
+    print("Invalid Task Number.");
   }
 }
+
+void markTaskDone(){
+  viewTask();
+
+  if(tasks.isEmpty) return;
+
+  stdout.write("Enter Task number to mark as done: ");
+  String? input = stdin.readLineSync();
+  int? index = int.tryParse(input ?? '');
+
+  if( index!= null && index>0 && index<=tasks.length){
+    tasks[index-1].isDone = true;
+    print("'${tasks[index-1].title}' Marked As Done.");
+  } else {
+    print("Invalid Task Number");
+  }
+}
+
