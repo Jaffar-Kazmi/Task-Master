@@ -6,6 +6,7 @@ build/
 
 /bin
 /text
+/test
 
 # If you're using Flutter for Dart console testing
 .flutter-plugins
